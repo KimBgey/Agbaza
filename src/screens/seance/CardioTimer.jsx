@@ -37,7 +37,7 @@ export default function CardioTimer({ exName, onComplete }) {
     ? `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
     : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
 
-  const fontSize = h > 0 ? 58 : 80
+  const fontSize = h > 0 ? 46 : 64
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -62,7 +62,7 @@ export default function CardioTimer({ exName, onComplete }) {
           borderRadius: 'var(--ag-radius)',
           background: running ? 'rgba(0,196,167,0.07)' : 'var(--ag-surface)',
           border: `2px solid ${running ? '#00C4A7' : (started ? 'var(--ag-border)' : 'var(--ag-border)')}`,
-          padding: '44px 24px 36px',
+          padding: '32px 24px 28px',
           textAlign: 'center',
           transition: 'border-color 300ms, background 300ms',
           animation: running ? 'cardio-pulse 2s ease-in-out infinite' : 'none',
@@ -82,7 +82,7 @@ export default function CardioTimer({ exName, onComplete }) {
             fontSize,
             fontWeight: 800,
             fontStyle: 'italic',
-            letterSpacing: '-4px',
+            letterSpacing: '-2px',
             color: running ? '#00C4A7' : (started ? 'var(--ag-text)' : 'var(--ag-muted)'),
             lineHeight: 1,
             transition: 'color 300ms',

@@ -258,9 +258,9 @@ export default function LiveSession({ program, onFinish, onCancel }) {
         >
           <IconChevronLeft size={18} />
         </button>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 14, fontWeight: 700 }}>
-            {program?.name || t('seance.free_training')}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {program?.name || 'Libre'}
           </div>
           <div style={{ fontSize: 11, color: 'var(--ag-muted)' }}>
             {exerciseList.length > 0
@@ -281,9 +281,9 @@ export default function LiveSession({ program, onFinish, onCancel }) {
         <button
           className="btn-ghost"
           onClick={() => setShowEnd(true)}
-          style={{ color: 'var(--ag-orange)', fontWeight: 700, fontSize: 12 }}
+          style={{ color: 'var(--ag-orange)', fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap' }}
         >
-          {t('seance.finish_session')}
+          {t('common.done')}
         </button>
       </div>
 

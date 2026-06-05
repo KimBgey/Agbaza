@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { useExercises } from '../../hooks/useFirestore'
 import { IconSearch, IconPlus, IconCheck, IconX } from '../../components/Icons'
 
-const MUSCLE_GROUPS = ['chest', 'back', 'legs', 'shoulders', 'biceps', 'triceps', 'core']
+const MUSCLE_GROUPS = ['chest', 'back', 'legs', 'shoulders', 'biceps', 'triceps', 'core', 'cardio']
 
 function muscleColor(group) {
-  const map = { chest:'#F55E00', back:'#4A6CF7', legs:'#2DA854', shoulders:'#C8A000', biceps:'#A855F7', triceps:'#A855F7', core:'#E11D48' }
+  const map = { chest:'#F55E00', back:'#4A6CF7', legs:'#2DA854', shoulders:'#C8A000', biceps:'#A855F7', triceps:'#A855F7', core:'#E11D48', cardio:'#00C4A7' }
   return map[group] || '#777'
 }
 

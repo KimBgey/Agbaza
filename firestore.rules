@@ -22,10 +22,15 @@ service cloud.firestore {
 
     // ─── AGBAZA ──────────────────────────────────────────────────────────
 
-    // Bibliothèque d'exercices — lecture publique, écriture Admin SDK uniquement
+    // Bibliothèque d'exercices — lecture publique, exercices custom par le propriétaire
     match /agbaza_exercises/{doc} {
       allow read: if true;
-      allow write: if false;
+      allow create: if request.auth != null
+        && request.resource.data.isCustom == true
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update, delete: if request.auth != null
+        && resource.data.isCustom == true
+        && resource.data.createdBy == request.auth.uid;
     }
 
     // Profil utilisateur

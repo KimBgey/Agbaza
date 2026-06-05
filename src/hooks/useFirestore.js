@@ -107,11 +107,14 @@ export function useExercises() {
 
   const addCustomExercise = async (data) => {
     if (!user) return
-    await addDoc(collection(db, 'agbaza_exercises'), {
+    const ref = await addDoc(collection(db, 'agbaza_exercises'), {
       ...data,
       isCustom: true,
       createdBy: user.uid
     })
+    const newEx = { id: ref.id, ...data, isCustom: true, createdBy: user.uid }
+    setExercises(prev => [...prev, newEx])
+    return ref.id
   }
 
   return { exercises, loading, addCustomExercise }

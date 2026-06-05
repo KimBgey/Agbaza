@@ -49,25 +49,37 @@ export default function Seance() {
 
         {/* Free training */}
         <button
-          className="card"
-          style={{
-            cursor: 'pointer', textAlign: 'left', border: '1px solid var(--ag-border)',
-            display: 'flex', alignItems: 'center', gap: 14
-          }}
           onClick={() => handleStartProgram(null)}
+          style={{
+            cursor: 'pointer',
+            textAlign: 'left',
+            background: 'var(--ag-orange-soft)',
+            border: '1px solid rgba(245,94,0,0.35)',
+            borderRadius: 'var(--ag-radius)',
+            padding: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 14,
+            width: '100%',
+          }}
         >
           <div style={{
-            width: 44, height: 44, borderRadius: 'var(--ag-radius-sm)',
-            background: 'var(--ag-orange-soft)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+            width: 48, height: 48, borderRadius: '50%',
+            background: 'var(--ag-orange)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            boxShadow: '0 4px 12px rgba(245,94,0,0.35)',
           }}>
-            <IconPlus size={22} color="var(--ag-orange)" />
+            <IconPlay size={20} color="#fff" />
           </div>
           <div style={{ flex: 1 }}>
-            <div className="t-card-h">{t('seance.free_training')}</div>
-            <div className="t-label" style={{ marginTop: 2 }}>Sans programme prédéfini</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--ag-orange)', letterSpacing: '-0.3px' }}>
+              {t('seance.free_training')}
+            </div>
+            <div className="t-label" style={{ marginTop: 3, color: 'rgba(245,94,0,0.6)' }}>
+              Choisis tes exercices au fil de la séance
+            </div>
           </div>
-          <IconChevronRight size={16} color="var(--ag-muted)" />
+          <IconChevronRight size={18} color="var(--ag-orange)" />
         </button>
 
         {/* Programs */}

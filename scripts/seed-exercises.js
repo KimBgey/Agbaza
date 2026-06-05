@@ -99,17 +99,41 @@ const EXERCISES = [
   { name_fr: "Leg Raises suspendu",          name_en: "Hanging Leg Raises",           muscleGroup: "core",      type: "isolation", equipment: "bodyweight" },
   { name_fr: "Russian Twist",                name_en: "Russian Twist",                muscleGroup: "core",      type: "isolation", equipment: "bodyweight" },
   { name_fr: "Gainage latéral",              name_en: "Side Plank",                   muscleGroup: "core",      type: "isolation", equipment: "bodyweight" },
+
+  // CARDIO
+  { name_fr: "Vélo stationnaire",            name_en: "Stationary Bike",              muscleGroup: "cardio",    type: "cardio",    equipment: "cardio_machine" },
+  { name_fr: "Tapis de course",              name_en: "Treadmill",                    muscleGroup: "cardio",    type: "cardio",    equipment: "cardio_machine" },
+  { name_fr: "Rameur",                       name_en: "Rowing Machine",               muscleGroup: "cardio",    type: "cardio",    equipment: "cardio_machine" },
+  { name_fr: "Elliptique",                   name_en: "Elliptical",                   muscleGroup: "cardio",    type: "cardio",    equipment: "cardio_machine" },
+  { name_fr: "Corde à sauter",               name_en: "Jump Rope",                    muscleGroup: "cardio",    type: "cardio",    equipment: "bodyweight"     },
+  { name_fr: "Stair Master",                 name_en: "Stair Master",                 muscleGroup: "cardio",    type: "cardio",    equipment: "cardio_machine" },
+  { name_fr: "Course à pied",               name_en: "Running",                      muscleGroup: "cardio",    type: "cardio",    equipment: "bodyweight"     },
 ]
 
 async function seed() {
+  const force = process.argv.includes('--force')
   console.log('🌱 Seeding AGBAZA exercises into Firestore…\n')
   const col = db.collection('agbaza_exercises')
 
   // Check if already seeded
   const existing = await col.where('isCustom', '==', false).limit(1).get()
   if (!existing.empty) {
-    console.log(`⚠️  Already seeded. Delete agbaza_exercises documents first to re-seed.`)
-    process.exit(0)
+    if (!force) {
+      console.log(`⚠️  Already seeded. Run  npm run seed -- --force  to wipe and re-seed.`)
+      process.exit(0)
+    }
+    // --force: delete all non-custom exercises first
+    console.log('   Deleting existing seed exercises…')
+    const all = await col.where('isCustom', '==', false).get()
+    let delBatch = db.batch()
+    let n = 0
+    for (const d of all.docs) {
+      delBatch.delete(d.ref)
+      n++
+      if (n % 500 === 0) { await delBatch.commit(); delBatch = db.batch() }
+    }
+    if (n % 500 !== 0) await delBatch.commit()
+    console.log(`   Deleted ${n} existing exercises.\n`)
   }
 
   // Batch writes (max 500 per batch)

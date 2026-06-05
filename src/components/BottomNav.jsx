@@ -35,7 +35,8 @@ export default function BottomNav() {
       alignItems: 'center',
       justifyContent: 'space-around',
       zIndex: 30,
-      boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
+      boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+      overflow: 'visible',
     }}>
       {/* Left tabs */}
       {SIDE_TABS[0].map(({ path, labelKey, Icon }) => (
@@ -52,23 +53,19 @@ export default function BottomNav() {
           flexDirection: 'column',
           alignItems: 'center',
           gap: 4,
-          padding: '0',
           border: 'none',
           background: 'transparent',
           cursor: 'pointer',
-          position: 'relative',
           flex: 'none',
           width: 64,
+          padding: 0,
         }}
       >
-        {/* Elevated orange disc */}
         <div style={{
           width: 52,
           height: 52,
           borderRadius: '50%',
-          background: isSeanceActive
-            ? 'var(--ag-orange)'
-            : 'var(--ag-orange-dim)',
+          background: isSeanceActive ? 'var(--ag-orange)' : 'var(--ag-orange-dim)',
           boxShadow: isSeanceActive
             ? '0 0 0 4px rgba(245,94,0,0.25), 0 4px 16px rgba(245,94,0,0.4)'
             : '0 4px 12px rgba(0,0,0,0.4)',
@@ -76,7 +73,7 @@ export default function BottomNav() {
           alignItems: 'center',
           justifyContent: 'center',
           transition: 'background 150ms, box-shadow 150ms',
-          marginTop: -20,
+          marginTop: -24,
           border: `2px solid ${isSeanceActive ? 'rgba(255,255,255,0.2)' : 'rgba(245,94,0,0.4)'}`,
         }}>
           <IconPlay size={20} color="#fff" />
@@ -113,13 +110,12 @@ function SideTab({ path, labelKey, Icon, active, navigate, t }) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 3,
+        gap: 4,
         padding: '6px 4px',
         borderRadius: 12,
         border: 'none',
         cursor: 'pointer',
-        background: active ? 'var(--ag-orange-soft)' : 'transparent',
-        transition: 'background 150ms',
+        background: 'transparent',
         minHeight: 48,
         minWidth: 44,
       }}

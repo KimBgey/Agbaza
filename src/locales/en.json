@@ -111,6 +111,7 @@
     "custom_add": "Add custom exercise",
     "custom_name": "Exercise name",
     "custom_muscle": "Muscle group",
+    "cardio": "Cardio",
     "muscles": {
       "chest": "Chest",
       "back": "Back",
@@ -118,14 +119,16 @@
       "shoulders": "Shoulders",
       "biceps": "Biceps",
       "triceps": "Triceps",
-      "core": "Core"
+      "core": "Core",
+      "cardio": "Cardio"
     },
     "equipment": {
       "barbell": "Barbell",
       "dumbbell": "Dumbbell",
       "cable": "Cable",
       "machine": "Machine",
-      "bodyweight": "Bodyweight"
+      "bodyweight": "Bodyweight",
+      "cardio_machine": "Cardio machine"
     }
   },
 

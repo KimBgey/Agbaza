@@ -1,0 +1,208 @@
+{
+  "app_name": "AGBAZA",
+  "tagline": "Track your training. Own your progress.",
+
+  "nav": {
+    "home": "Accueil",
+    "programme": "Programme",
+    "seance": "Séance",
+    "progres": "Progrès",
+    "profil": "Profil"
+  },
+
+  "auth": {
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "email": "Adresse email",
+    "password": "Mot de passe",
+    "confirm_password": "Confirmer le mot de passe",
+    "forgot_password": "Mot de passe oublié ?",
+    "no_account": "Pas encore de compte ?",
+    "have_account": "Déjà un compte ?",
+    "google_sign_in": "Continuer avec Google",
+    "or": "ou",
+    "welcome_back": "Bon retour.",
+    "create_account": "Créer un compte",
+    "logout": "Déconnexion",
+    "errors": {
+      "invalid_email": "Email invalide",
+      "wrong_password": "Mot de passe incorrect",
+      "user_not_found": "Aucun compte trouvé",
+      "email_in_use": "Email déjà utilisé",
+      "weak_password": "Mot de passe trop faible (6 caractères minimum)",
+      "passwords_mismatch": "Les mots de passe ne correspondent pas"
+    }
+  },
+
+  "onboarding": {
+    "title": "Parlons de toi.",
+    "name": "Ton prénom",
+    "weight": "Ton poids",
+    "goal": "Ton objectif",
+    "training_days": "Jours d'entraînement / semaine",
+    "goals": {
+      "cut": "Sèche",
+      "bulk": "Prise de masse",
+      "maintain": "Maintien"
+    },
+    "continue": "Continuer",
+    "finish": "C'est parti"
+  },
+
+  "home": {
+    "greeting_morning": "Bonjour",
+    "greeting_afternoon": "Bon après-midi",
+    "greeting_evening": "Bonsoir",
+    "start_session": "Démarrer la séance",
+    "last_session": "Dernière séance",
+    "week_stats": "Cette semaine",
+    "sessions": "Séances",
+    "volume": "Volume",
+    "avg_duration": "Durée moy.",
+    "pr_today": "PR du jour",
+    "next_program": "Programme suggéré",
+    "no_session_yet": "Aucune séance cette semaine.",
+    "motivations": [
+      "La douleur est temporaire. La fierté est éternelle.",
+      "Chaque rep compte.",
+      "Tu es plus fort qu'hier.",
+      "Le progrès, pas la perfection.",
+      "Soulève. Répète. Progresse."
+    ]
+  },
+
+  "programme": {
+    "title": "Programmes",
+    "my_programs": "Mes programmes",
+    "create": "Créer un programme",
+    "no_programs": "Aucun programme créé.",
+    "create_first": "Crée ton premier programme",
+    "library": "Bibliothèque",
+    "exercises": "exercices",
+    "last_used": "Dernier usage",
+    "never": "Jamais",
+    "start": "Démarrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "confirm_delete": "Supprimer ce programme ?"
+  },
+
+  "create_program": {
+    "title": "Nouveau programme",
+    "program_name": "Nom du programme",
+    "program_name_placeholder": "Ex: Push Day A",
+    "add_exercise": "Ajouter un exercice",
+    "sets": "Séries",
+    "reps_min": "Reps min",
+    "reps_max": "Reps max",
+    "rest": "Repos (sec)",
+    "save": "Sauvegarder",
+    "search_exercise": "Rechercher un exercice…",
+    "all_muscles": "Tous",
+    "no_exercises_added": "Aucun exercice ajouté.",
+    "reorder_hint": "Maintiens pour réordonner"
+  },
+
+  "exercise": {
+    "compound": "Poly-articulaire",
+    "isolation": "Isolation",
+    "add": "Ajouter",
+    "added": "Ajouté",
+    "custom_add": "Ajouter un exercice custom",
+    "custom_name": "Nom de l'exercice",
+    "custom_muscle": "Groupe musculaire",
+    "muscles": {
+      "chest": "Poitrine",
+      "back": "Dos",
+      "legs": "Jambes",
+      "shoulders": "Épaules",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "core": "Core"
+    },
+    "equipment": {
+      "barbell": "Barre",
+      "dumbbell": "Haltères",
+      "cable": "Câble",
+      "machine": "Machine",
+      "bodyweight": "Poids de corps"
+    }
+  },
+
+  "seance": {
+    "title": "Séance",
+    "choose_program": "Choisir un programme",
+    "free_training": "Entraînement libre",
+    "start": "Démarrer",
+    "in_progress": "En cours",
+    "set": "Série",
+    "of": "sur",
+    "exercise": "exercice",
+    "exercises": "exercices",
+    "weight_kg": "Poids (kg)",
+    "reps": "Reps",
+    "validate_set": "Valider",
+    "skip": "Passer",
+    "rest": "Repos",
+    "rest_over": "C'est parti !",
+    "next_exercise": "Exercice suivant",
+    "finish_session": "Terminer la séance",
+    "bonus_title": "Compléments suggérés",
+    "bonus_subtitle": "Muscles non travaillés aujourd'hui",
+    "estimated_time": "Durée estimée"
+  },
+
+  "end_screen": {
+    "title_1": "Séance",
+    "title_2": "terminée.",
+    "exercises_done": "Exercices",
+    "total_volume": "Volume total",
+    "duration": "Durée",
+    "finish": "Terminer",
+    "congrats": "Bien joué !"
+  },
+
+  "progres": {
+    "title": "Progrès",
+    "weekly_volume": "Volume hebdomadaire",
+    "by_muscle": "Par groupe musculaire",
+    "pr_history": "Historique du 1RM",
+    "select_exercise": "Choisir un exercice",
+    "sessions_history": "Historique des séances",
+    "no_data": "Pas encore de données.",
+    "train_first": "Fais quelques séances pour voir tes progrès.",
+    "session_detail": "Détail de la séance"
+  },
+
+  "profil": {
+    "title": "Profil",
+    "name": "Prénom",
+    "weight": "Poids",
+    "goal": "Objectif",
+    "unit": "Unité de poids",
+    "language": "Langue",
+    "training_days": "Jours / semaine",
+    "save": "Enregistrer",
+    "saved": "Enregistré",
+    "logout": "Déconnexion",
+    "member_since": "Membre depuis"
+  },
+
+  "common": {
+    "kg": "kg",
+    "lbs": "lbs",
+    "min": "min",
+    "sec": "sec",
+    "days": "j",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "loading": "Chargement…",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "back": "Retour",
+    "save": "Sauvegarder",
+    "delete": "Supprimer",
+    "add": "Ajouter",
+    "done": "Terminé"
+  }
+}

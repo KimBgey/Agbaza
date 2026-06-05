@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Budgets (existing) ───────────────────────────────────────────────
+    match /budgets/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ─── Zikafon (existing) ──────────────────────────────────────────────
+    match /zikafon_users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      match /zikafon_likedTracks/{trackId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+
+      match /zikafon_moodSessions/{sessionId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
+    // ─── AGBAZA ──────────────────────────────────────────────────────────
+
+    // Bibliothèque d'exercices — lecture publique, écriture Admin SDK uniquement
+    match /agbaza_exercises/{doc} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Profil utilisateur
+    match /agbaza_users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Programmes
+    match /agbaza_programs/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Séances
+    match /agbaza_sessions/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+  }
+}

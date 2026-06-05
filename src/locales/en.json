@@ -1,0 +1,208 @@
+{
+  "app_name": "AGBAZA",
+  "tagline": "Track your training. Own your progress.",
+
+  "nav": {
+    "home": "Home",
+    "programme": "Program",
+    "seance": "Session",
+    "progres": "Progress",
+    "profil": "Profile"
+  },
+
+  "auth": {
+    "login": "Sign in",
+    "register": "Sign up",
+    "email": "Email address",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "forgot_password": "Forgot password?",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "google_sign_in": "Continue with Google",
+    "or": "or",
+    "welcome_back": "Welcome back.",
+    "create_account": "Create account",
+    "logout": "Sign out",
+    "errors": {
+      "invalid_email": "Invalid email",
+      "wrong_password": "Wrong password",
+      "user_not_found": "No account found",
+      "email_in_use": "Email already in use",
+      "weak_password": "Password too weak (min 6 characters)",
+      "passwords_mismatch": "Passwords do not match"
+    }
+  },
+
+  "onboarding": {
+    "title": "Tell us about you.",
+    "name": "Your first name",
+    "weight": "Your weight",
+    "goal": "Your goal",
+    "training_days": "Training days / week",
+    "goals": {
+      "cut": "Cut",
+      "bulk": "Bulk",
+      "maintain": "Maintain"
+    },
+    "continue": "Continue",
+    "finish": "Let's go"
+  },
+
+  "home": {
+    "greeting_morning": "Good morning",
+    "greeting_afternoon": "Good afternoon",
+    "greeting_evening": "Good evening",
+    "start_session": "Start session",
+    "last_session": "Last session",
+    "week_stats": "This week",
+    "sessions": "Sessions",
+    "volume": "Volume",
+    "avg_duration": "Avg duration",
+    "pr_today": "Today's PR",
+    "next_program": "Suggested program",
+    "no_session_yet": "No sessions this week.",
+    "motivations": [
+      "Pain is temporary. Pride is forever.",
+      "Every rep counts.",
+      "You are stronger than yesterday.",
+      "Progress, not perfection.",
+      "Lift. Repeat. Progress."
+    ]
+  },
+
+  "programme": {
+    "title": "Programs",
+    "my_programs": "My programs",
+    "create": "Create program",
+    "no_programs": "No programs yet.",
+    "create_first": "Create your first program",
+    "library": "Library",
+    "exercises": "exercises",
+    "last_used": "Last used",
+    "never": "Never",
+    "start": "Start",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm_delete": "Delete this program?"
+  },
+
+  "create_program": {
+    "title": "New program",
+    "program_name": "Program name",
+    "program_name_placeholder": "Ex: Push Day A",
+    "add_exercise": "Add exercise",
+    "sets": "Sets",
+    "reps_min": "Min reps",
+    "reps_max": "Max reps",
+    "rest": "Rest (sec)",
+    "save": "Save",
+    "search_exercise": "Search exercise…",
+    "all_muscles": "All",
+    "no_exercises_added": "No exercises added.",
+    "reorder_hint": "Hold to reorder"
+  },
+
+  "exercise": {
+    "compound": "Compound",
+    "isolation": "Isolation",
+    "add": "Add",
+    "added": "Added",
+    "custom_add": "Add custom exercise",
+    "custom_name": "Exercise name",
+    "custom_muscle": "Muscle group",
+    "muscles": {
+      "chest": "Chest",
+      "back": "Back",
+      "legs": "Legs",
+      "shoulders": "Shoulders",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "core": "Core"
+    },
+    "equipment": {
+      "barbell": "Barbell",
+      "dumbbell": "Dumbbell",
+      "cable": "Cable",
+      "machine": "Machine",
+      "bodyweight": "Bodyweight"
+    }
+  },
+
+  "seance": {
+    "title": "Session",
+    "choose_program": "Choose a program",
+    "free_training": "Free training",
+    "start": "Start",
+    "in_progress": "In progress",
+    "set": "Set",
+    "of": "of",
+    "exercise": "exercise",
+    "exercises": "exercises",
+    "weight_kg": "Weight (kg)",
+    "reps": "Reps",
+    "validate_set": "Validate",
+    "skip": "Skip",
+    "rest": "Rest",
+    "rest_over": "Let's go!",
+    "next_exercise": "Next exercise",
+    "finish_session": "Finish session",
+    "bonus_title": "Suggested extras",
+    "bonus_subtitle": "Untrained muscles today",
+    "estimated_time": "Estimated time"
+  },
+
+  "end_screen": {
+    "title_1": "Session",
+    "title_2": "complete.",
+    "exercises_done": "Exercises",
+    "total_volume": "Total volume",
+    "duration": "Duration",
+    "finish": "Finish",
+    "congrats": "Well done!"
+  },
+
+  "progres": {
+    "title": "Progress",
+    "weekly_volume": "Weekly volume",
+    "by_muscle": "By muscle group",
+    "pr_history": "1RM history",
+    "select_exercise": "Choose exercise",
+    "sessions_history": "Session history",
+    "no_data": "No data yet.",
+    "train_first": "Complete some sessions to see your progress.",
+    "session_detail": "Session detail"
+  },
+
+  "profil": {
+    "title": "Profile",
+    "name": "First name",
+    "weight": "Weight",
+    "goal": "Goal",
+    "unit": "Weight unit",
+    "language": "Language",
+    "training_days": "Days / week",
+    "save": "Save",
+    "saved": "Saved",
+    "logout": "Sign out",
+    "member_since": "Member since"
+  },
+
+  "common": {
+    "kg": "kg",
+    "lbs": "lbs",
+    "min": "min",
+    "sec": "sec",
+    "days": "d",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "loading": "Loading…",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "back": "Back",
+    "save": "Save",
+    "delete": "Delete",
+    "add": "Add",
+    "done": "Done"
+  }
+}

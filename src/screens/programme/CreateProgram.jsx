@@ -4,7 +4,7 @@ import { usePrograms } from '../../hooks/useFirestore'
 import { IconChevronLeft, IconPlus, IconTrash, IconGrip } from '../../components/Icons'
 import ExerciseLibrary from './ExerciseLibrary'
 
-export default function CreateProgram({ existing, onClose }) {
+export default function CreateProgram({ existing, onClose, onSaved }) {
   const { t } = useTranslation()
   const { createProgram, updateProgram } = usePrograms()
   const [name, setName] = useState(existing?.name || '')
@@ -55,7 +55,7 @@ export default function CreateProgram({ existing, onClose }) {
       } else {
         await createProgram(data)
       }
-      onClose()
+      onSaved ? onSaved() : onClose()
     } catch (_) {}
     setSaving(false)
   }

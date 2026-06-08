@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useExercises } from '../../hooks/useFirestore'
 import { IconSearch, IconPlus, IconCheck, IconX } from '../../components/Icons'
+import ExerciseSheet from './ExerciseSheet'
 
 const MUSCLE_GROUPS = ['chest', 'back', 'legs', 'shoulders', 'biceps', 'triceps', 'core', 'cardio']
 
@@ -21,6 +22,7 @@ export default function ExerciseLibrary({ selected = [], onSelect, onClose }) {
   const { exercises, loading, addCustomExercise } = useExercises()
   const [filter, setFilter] = useState(null)
   const [search, setSearch] = useState('')
+  const [selectedExercise, setSelectedExercise] = useState(null)
   const [showCustom, setShowCustom] = useState(false)
   const [customName, setCustomName] = useState('')
   const [customMuscle, setCustomMuscle] = useState('chest')
@@ -110,11 +112,11 @@ export default function ExerciseLibrary({ selected = [], onSelect, onClose }) {
                   key={ex.id}
                   className="set-row"
                   style={{
-                    marginBottom: 8, cursor: 'pointer', position: 'relative', overflow: 'hidden',
+                    marginBottom: 8, position: 'relative', overflow: 'hidden',
                     borderColor: sel ? 'rgba(245,94,0,0.3)' : undefined,
-                    background: sel ? 'var(--ag-orange-soft)' : undefined
+                    background: sel ? 'var(--ag-orange-soft)' : undefined,
+                    padding: 0,
                   }}
-                  onClick={() => onSelect(ex)}
                 >
                   {/* Background image */}
                   <div style={{
@@ -128,7 +130,11 @@ export default function ExerciseLibrary({ selected = [], onSelect, onClose }) {
                     background: 'linear-gradient(to left, transparent, var(--ag-surface) 100%)'
                   }} />
 
-                  <div style={{ flex: 1, zIndex: 1 }}>
+                  {/* Info area — tap to open detail sheet */}
+                  <div
+                    style={{ flex: 1, zIndex: 1, cursor: 'pointer', padding: '11px 0 11px 12px', minWidth: 0 }}
+                    onClick={() => setSelectedExercise(ex)}
+                  >
                     <div style={{ fontSize: 14, fontWeight: 700 }}>{getName(ex)}</div>
                     <div style={{ fontSize: 11, color: muscleColor(ex.muscleGroup), fontWeight: 600, marginTop: 2 }}>
                       {t(`exercise.muscles.${ex.muscleGroup}`)}
@@ -139,16 +145,25 @@ export default function ExerciseLibrary({ selected = [], onSelect, onClose }) {
                     </div>
                   </div>
 
+                  {/* + button — tap to add/toggle */}
                   <div
+                    role="button"
+                    aria-label={sel ? t('exercise.added') : t('exercise.add')}
+                    onClick={e => { e.stopPropagation(); onSelect(ex) }}
                     style={{
-                      width: 28, height: 28, borderRadius: '50%', flexShrink: 0, zIndex: 1,
+                      width: 44, height: 44, flexShrink: 0, zIndex: 1, cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}
+                  >
+                    <div style={{
+                      width: 28, height: 28, borderRadius: '50%',
                       background: sel ? 'var(--ag-orange)' : 'var(--ag-surface2)',
                       border: `1px solid ${sel ? 'var(--ag-orange)' : 'var(--ag-border)'}`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       transition: 'all 150ms'
-                    }}
-                  >
-                    {sel ? <IconCheck size={13} color="#fff" /> : <IconPlus size={13} color="var(--ag-muted)" />}
+                    }}>
+                      {sel ? <IconCheck size={13} color="#fff" /> : <IconPlus size={13} color="var(--ag-muted)" />}
+                    </div>
                   </div>
                 </div>
               )
@@ -166,6 +181,15 @@ export default function ExerciseLibrary({ selected = [], onSelect, onClose }) {
           </>
         )}
       </div>
+
+      {/* Exercise detail sheet */}
+      {selectedExercise && (
+        <ExerciseSheet
+          exercise={selectedExercise}
+          onClose={() => setSelectedExercise(null)}
+          onAdd={onSelect}
+        />
+      )}
 
       {/* Custom exercise form */}
       {showCustom && (

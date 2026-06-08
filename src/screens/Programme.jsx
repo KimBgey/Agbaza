@@ -13,7 +13,7 @@ function muscleColor(group) {
 export default function Programme() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { programs, loading, deleteProgram } = usePrograms()
+  const { programs, loading, deleteProgram, refetch } = usePrograms()
   const [showCreate, setShowCreate] = useState(false)
   const [editProgram, setEditProgram] = useState(null)
   const [confirmDelete, setConfirmDelete] = useState(null)
@@ -29,6 +29,7 @@ export default function Programme() {
       <CreateProgram
         existing={editProgram}
         onClose={() => { setShowCreate(false); setEditProgram(null) }}
+        onSaved={() => { setShowCreate(false); setEditProgram(null); refetch() }}
       />
     )
   }

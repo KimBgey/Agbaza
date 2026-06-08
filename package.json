@@ -7,9 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "seed": "node --env-file=.env scripts/seed-exercises.js"
+    "seed": "node --env-file=.env scripts/seed-exercises.js",
+    "enrich": "node --env-file=.env scripts/enrich-exercises.js",
+    "enrich:dry": "node --env-file=.env scripts/enrich-exercises.js --dry-run"
   },
   "dependencies": {
+    "body-highlighter": "^3.0.2",
     "firebase": "^10.12.0",
     "i18next": "^23.11.5",
     "react": "^18.3.1",

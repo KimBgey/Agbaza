@@ -323,11 +323,27 @@ export default function LiveSession({ program, onFinish, onCancel }) {
             display: 'flex', flexDirection: 'column', alignItems: 'center',
             gap: 16, padding: '32px 16px', textAlign: 'center'
           }}>
-            <img
-              src="/icons/mascot.png"
-              alt=""
-              style={{ width: 110, height: 110, objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(42%) sepia(90%) saturate(2000%) hue-rotate(10deg) brightness(105%)' }}
-            />
+            <div style={{ position: 'relative', width: 130, height: 130 }}>
+              {/* Orange glow behind barbell area */}
+              <div style={{
+                position: 'absolute',
+                bottom: 8, left: '50%', transform: 'translateX(-50%)',
+                width: 90, height: 36,
+                background: 'var(--ag-orange)',
+                borderRadius: '50%',
+                filter: 'blur(22px)',
+                opacity: 0.5,
+              }} />
+              <img
+                src="/icons/mascot.png"
+                alt=""
+                style={{
+                  width: 130, height: 130, objectFit: 'contain',
+                  filter: 'brightness(0) invert(1)',
+                  position: 'relative', zIndex: 1,
+                }}
+              />
+            </div>
             <div>
               <div style={{ fontSize: 17, fontWeight: 800, letterSpacing: '-0.5px', marginBottom: 6 }}>
                 {t('seance.free_training')}

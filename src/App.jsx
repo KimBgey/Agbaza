@@ -32,9 +32,7 @@ function Loader() {
       minHeight: '100vh', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center', background: 'var(--ag-bg)'
     }}>
-      <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-1px', color: 'var(--ag-orange)' }}>
-        AGBAZA
-      </div>
+      <img src="/icons/text.png" alt="AGBAZA" style={{ height: 40, width: 'auto' }} />
       <div style={{ marginTop: 24, display: 'flex', gap: 6 }}>
         {[0,1,2].map(i => (
           <div key={i} style={{

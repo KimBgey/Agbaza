@@ -36,6 +36,8 @@
 
   "onboarding": {
     "title": "Parlons de toi.",
+    "welcome_back": "Content de te revoir.",
+    "lets_go": "C'est parti",
     "name": "Ton prénom",
     "weight": "Ton poids",
     "goal": "Ton objectif",
@@ -46,7 +48,19 @@
       "maintain": "Maintien"
     },
     "continue": "Continuer",
-    "finish": "C'est parti"
+    "finish": "C'est parti",
+    "tips": [
+      { "title": "Surcharge progressive", "body": "Ajoute 2.5 kg par semaine sur tes exercices principaux. La constance bat l'intensité." },
+      { "title": "Échauffement", "body": "5 min de cardio léger avant de charger. Tes tendons te diront merci dans 10 ans." },
+      { "title": "Sommeil", "body": "Tu te construis en dehors de la salle. 7 à 9 h de sommeil = plus de croissance musculaire." },
+      { "title": "Protéines", "body": "Vise 1.6 à 2 g de protéines par kg de poids de corps. C'est là que se jouent les gains." },
+      { "title": "Temps de repos", "body": "60-90 s pour les isolations, 2-3 min pour les poly-articulaires. Respecte tes temps de repos." },
+      { "title": "Hydratation", "body": "Bois 0.5 L d'eau avant ta séance. La déshydratation réduit les perfs de 10 à 20 %." },
+      { "title": "Technique avant tout", "body": "Une rep avec une mauvaise technique est une blessure en attente. La forme prime sur la charge." },
+      { "title": "Régularité", "body": "3 séances par semaine pendant 1 an > 6 séances pendant 2 mois puis rien." },
+      { "title": "Récupération active", "body": "Une marche ou du stretching le lendemain accélère la récupération musculaire." },
+      { "title": "Mind-muscle", "body": "Concentre-toi sur le muscle que tu travailles. La connexion mentale amplifie l'activation." }
+    ]
   },
 
   "home": {

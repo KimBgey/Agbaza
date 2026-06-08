@@ -72,6 +72,12 @@ export function useStopwatch() {
     setRunning(true)
   }, [elapsed])
 
+  const startFrom = useCallback((initialSeconds) => {
+    setElapsed(initialSeconds)
+    startRef.current = Date.now() - initialSeconds * 1000
+    setRunning(true)
+  }, [])
+
   const stop = useCallback(() => {
     clearInterval(intervalRef.current)
     setRunning(false)
@@ -95,5 +101,5 @@ export function useStopwatch() {
   const seconds = elapsed % 60
   const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 
-  return { elapsed, minutes, seconds, formatted, running, start, stop, reset }
+  return { elapsed, minutes, seconds, formatted, running, start, startFrom, stop, reset }
 }

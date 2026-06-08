@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { usePrograms } from '../hooks/useFirestore'
 import { useSessions } from '../hooks/useFirestore'
 import { IconPlay, IconDumbbell, IconChevronRight, IconClock, IconPlus } from '../components/Icons'
 import LiveSession from './seance/LiveSession'
+
+const SESSION_KEY = 'ag_active_session'
 
 function muscleColor(group) {
   const map = { chest:'#F55E00', back:'#4A6CF7', legs:'#2DA854', shoulders:'#C8A000', biceps:'#A855F7', triceps:'#A855F7', core:'#E11D48' }
@@ -20,15 +22,29 @@ export default function Seance() {
   const [activeSession, setActiveSession] = useState(
     location.state?.program ? { program: location.state.program } : null
   )
+  const [resumeData, setResumeData] = useState(null)
+
+  // Check for a saved session on mount
+  useEffect(() => {
+    if (activeSession) return
+    try {
+      const raw = localStorage.getItem(SESSION_KEY)
+      if (!raw) return
+      const data = JSON.parse(raw)
+      const ageHours = (Date.now() - data.savedAt) / 3600000
+      if (ageHours < 12) setResumeData(data)
+      else localStorage.removeItem(SESSION_KEY)
+    } catch { localStorage.removeItem(SESSION_KEY) }
+  }, [])
 
   const handleStartProgram = (program) => {
+    setResumeData(null)
     setActiveSession({ program })
   }
 
   const handleFinishSession = async (sessionData) => {
-    try {
-      await saveSession(sessionData)
-    } catch (_) {}
+    localStorage.removeItem(SESSION_KEY)
+    try { await saveSession(sessionData) } catch (_) {}
     setActiveSession(null)
   }
 
@@ -36,8 +52,9 @@ export default function Seance() {
     return (
       <LiveSession
         program={activeSession.program}
+        resume={activeSession.resume || null}
         onFinish={handleFinishSession}
-        onCancel={() => setActiveSession(null)}
+        onCancel={() => { localStorage.removeItem(SESSION_KEY); setActiveSession(null) }}
       />
     )
   }
@@ -46,6 +63,45 @@ export default function Seance() {
     <div className="screen">
       <div className="px pt" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <h1 className="t-title">{t('seance.title')}</h1>
+
+        {/* Resume saved session */}
+        {resumeData && (
+          <div style={{
+            background: 'var(--ag-surface)',
+            border: '1px solid var(--ag-orange)',
+            borderRadius: 'var(--ag-radius)',
+            padding: '14px 16px',
+            display: 'flex', alignItems: 'center', gap: 12
+          }}>
+            <div style={{
+              width: 10, height: 10, borderRadius: '50%',
+              background: 'var(--ag-orange)',
+              boxShadow: '0 0 0 4px rgba(245,94,0,0.2)',
+              flexShrink: 0, animation: 'pulse 1.5s ease infinite'
+            }} />
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13, fontWeight: 800 }}>Séance en cours</div>
+              <div style={{ fontSize: 11, color: 'var(--ag-muted)', marginTop: 2 }}>
+                {resumeData.program?.name || 'Entraînement libre'} · {Math.floor(resumeData.elapsedSeconds / 60)} min
+              </div>
+            </div>
+            <button
+              className="btn-primary"
+              style={{ width: 'auto', padding: '8px 16px', fontSize: 12 }}
+              onClick={() => setActiveSession({ program: resumeData.program, resume: resumeData })}
+            >
+              Reprendre
+            </button>
+            <button
+              className="btn-icon"
+              onClick={() => { localStorage.removeItem(SESSION_KEY); setResumeData(null) }}
+              style={{ flexShrink: 0 }}
+              aria-label="Ignorer"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* Free training */}
         <button

@@ -36,6 +36,8 @@
 
   "onboarding": {
     "title": "Tell us about you.",
+    "welcome_back": "Good to see you.",
+    "lets_go": "Let's go",
     "name": "Your first name",
     "weight": "Your weight",
     "goal": "Your goal",
@@ -46,7 +48,19 @@
       "maintain": "Maintain"
     },
     "continue": "Continue",
-    "finish": "Let's go"
+    "finish": "Let's go",
+    "tips": [
+      { "title": "Progressive overload", "body": "Add 2.5 kg per week on your main lifts. Consistency beats intensity every time." },
+      { "title": "Warm up", "body": "5 min of light cardio before loading the bar. Your tendons will thank you in 10 years." },
+      { "title": "Sleep", "body": "You build muscle outside the gym. 7 to 9 h of sleep = more growth." },
+      { "title": "Protein", "body": "Target 1.6 to 2 g of protein per kg of body weight. That's where gains happen." },
+      { "title": "Rest times", "body": "60-90 s for isolation moves, 2-3 min for compounds. Respect your rest times." },
+      { "title": "Hydration", "body": "Drink 0.5 L before your session. Dehydration cuts performance by 10 to 20 %." },
+      { "title": "Form first", "body": "A rep with bad form is an injury waiting to happen. Form always beats load." },
+      { "title": "Consistency", "body": "3 sessions a week for 1 year beats 6 sessions for 2 months then nothing." },
+      { "title": "Active recovery", "body": "A walk or stretching the day after speeds up muscle recovery." },
+      { "title": "Mind-muscle", "body": "Focus on the muscle you are working. Mental connection amplifies activation." }
+    ]
   },
 
   "home": {

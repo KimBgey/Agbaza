@@ -30,7 +30,9 @@ function makeTrackedExercise(ex) {
   }
 }
 
-export default function LiveSession({ program, onFinish, onCancel }) {
+const SESSION_KEY = 'ag_active_session'
+
+export default function LiveSession({ program, resume, onFinish, onCancel }) {
   const { t, i18n }   = useTranslation()
   const { userProfile } = useAuth()
   const { exercises: exerciseDb } = useExercises()
@@ -40,6 +42,7 @@ export default function LiveSession({ program, onFinish, onCancel }) {
   const restTimer  = useRestTimer()
 
   const [exerciseList, setExerciseList] = useState(() => {
+    if (resume?.exerciseList) return resume.exerciseList
     if (!program?.exercises?.length) return []
     return program.exercises.map(ex => ({
       ...ex,
@@ -49,12 +52,43 @@ export default function LiveSession({ program, onFinish, onCancel }) {
     }))
   })
 
-  const [currentExIdx, setCurrentExIdx] = useState(0)
-  const [currentSetIdx, setCurrentSetIdx] = useState(0)
+  const [currentExIdx, setCurrentExIdx] = useState(resume?.currentExIdx ?? 0)
+  const [currentSetIdx, setCurrentSetIdx] = useState(resume?.currentSetIdx ?? 0)
   const [showEnd,     setShowEnd]     = useState(false)
   const [showLibrary, setShowLibrary] = useState(false)
 
-  useEffect(() => { stopwatch.start() }, [])
+  // Start or resume stopwatch
+  useEffect(() => {
+    if (resume?.elapsedSeconds) stopwatch.startFrom(resume.elapsedSeconds)
+    else stopwatch.start()
+  }, [])
+
+  // Persist session state to localStorage on every meaningful change
+  useEffect(() => {
+    if (exerciseList.length === 0) return
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      savedAt:        Date.now(),
+      elapsedSeconds: stopwatch.elapsed,
+      program:        program ? { id: program.id, name: program.name } : null,
+      exerciseList,
+      currentExIdx,
+      currentSetIdx,
+    }))
+  }, [exerciseList, currentExIdx, currentSetIdx])
+
+  // Keep elapsedSeconds fresh in localStorage every 10 s while running
+  useEffect(() => {
+    if (!stopwatch.running) return
+    const id = setInterval(() => {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY)
+        if (!raw) return
+        const data = JSON.parse(raw)
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ ...data, elapsedSeconds: stopwatch.elapsed }))
+      } catch {}
+    }, 10000)
+    return () => clearInterval(id)
+  }, [stopwatch.running, stopwatch.elapsed])
 
   const currentEx       = exerciseList[currentExIdx]
   const allExsDone      = exerciseList.length > 0 && currentExIdx >= exerciseList.length

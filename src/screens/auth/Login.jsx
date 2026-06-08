@@ -51,11 +51,12 @@ export default function Login() {
   return (
     <div className="auth-screen">
       {/* Header */}
-      <div style={{ paddingTop: 60, paddingBottom: 40 }}>
-        <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-1px', color: 'var(--ag-orange)' }}>
-          AGBAZA
+      <div style={{ paddingTop: 56, paddingBottom: 40 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
+          <img src="/icons/fav.png" alt="AGBAZA" style={{ width: 44, height: 44, borderRadius: 10 }} />
+          <img src="/icons/textW.png" alt="AGBAZA" style={{ height: 28, width: 'auto' }} />
         </div>
-        <div style={{ marginTop: 24, fontSize: 26, fontWeight: 800, letterSpacing: '-0.5px' }}>
+        <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.5px' }}>
           {t('auth.welcome_back')}
         </div>
         <div style={{ marginTop: 6, fontSize: 14, color: 'var(--ag-muted)' }}>

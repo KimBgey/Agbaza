@@ -84,13 +84,16 @@ export default function Home() {
           background: 'linear-gradient(to right, rgba(15,15,15,0.95) 55%, rgba(15,15,15,0.3))'
         }} />
         <div style={{ position: 'absolute', inset: 0, padding: '20px 16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 12, color: 'var(--ag-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              {getGreeting(t)}{userProfile?.name ? `, ${userProfile.name}` : ''}
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+            <div>
+              <div style={{ fontSize: 12, color: 'var(--ag-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                {getGreeting(t)}{userProfile?.name ? `, ${userProfile.name}` : ''}
+              </div>
+              <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.5px', marginTop: 4, lineHeight: 1.2, maxWidth: 200 }}>
+                {motivation}
+              </div>
             </div>
-            <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.5px', marginTop: 4, lineHeight: 1.2, maxWidth: 220 }}>
-              {motivation}
-            </div>
+            <img src="/icons/textW.png" alt="AGBAZA" style={{ height: 22, width: 'auto', marginTop: 2, opacity: 0.9 }} />
           </div>
           <button
             className="btn-primary"

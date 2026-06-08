@@ -63,19 +63,22 @@ export default function Seance() {
             width: '100%',
           }}
         >
+          {/* Mascot disc */}
           <div style={{
-            width: 48, height: 48, borderRadius: '50%',
+            width: 56, height: 56, borderRadius: '50%',
             background: 'var(--ag-orange)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-            boxShadow: '0 4px 12px rgba(245,94,0,0.35)',
+            boxShadow: '0 4px 16px rgba(245,94,0,0.4)',
+            overflow: 'hidden',
           }}>
-            <IconPlay size={20} color="#fff" />
+            <img src="/icons/mascot.png" alt="" style={{ width: 46, height: 46, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--ag-orange)', letterSpacing: '-0.3px' }}>
+            <img src="/icons/text.png" alt="AGBAZA" style={{ height: 20, width: 'auto', marginBottom: 4 }} />
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--ag-orange)', letterSpacing: '-0.3px' }}>
               {t('seance.free_training')}
             </div>
-            <div className="t-label" style={{ marginTop: 3, color: 'rgba(245,94,0,0.6)' }}>
+            <div className="t-label" style={{ marginTop: 2, color: 'rgba(245,94,0,0.6)' }}>
               Choisis tes exercices au fil de la séance
             </div>
           </div>

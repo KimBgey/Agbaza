@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import { useExercises } from '../../hooks/useFirestore'
 import { useRestTimer, useStopwatch } from '../../hooks/useTimer'
 import {
-  IconCheck, IconChevronLeft, IconPlus, IconDumbbell, IconX
+  IconCheck, IconChevronLeft, IconPlus, IconX
 } from '../../components/Icons'
 import ExerciseLibrary from '../programme/ExerciseLibrary'
 import EndScreen from './EndScreen'
@@ -321,16 +321,13 @@ export default function LiveSession({ program, onFinish, onCancel }) {
         {isFreeEmpty && (
           <div style={{
             display: 'flex', flexDirection: 'column', alignItems: 'center',
-            gap: 16, padding: '40px 16px', textAlign: 'center'
+            gap: 16, padding: '32px 16px', textAlign: 'center'
           }}>
-            <div style={{
-              width: 60, height: 60, borderRadius: '50%',
-              background: 'var(--ag-orange-soft)',
-              border: '1px solid rgba(245,94,0,0.2)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center'
-            }}>
-              <IconDumbbell size={26} color="var(--ag-orange)" />
-            </div>
+            <img
+              src="/icons/mascot.png"
+              alt=""
+              style={{ width: 110, height: 110, objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(42%) sepia(90%) saturate(2000%) hue-rotate(10deg) brightness(105%)' }}
+            />
             <div>
               <div style={{ fontSize: 17, fontWeight: 800, letterSpacing: '-0.5px', marginBottom: 6 }}>
                 {t('seance.free_training')}

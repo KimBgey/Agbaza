@@ -12,7 +12,7 @@ export default function EndScreen({ exercisesDone, totalVolume, durationMinutes,
       display: 'flex', flexDirection: 'column',
       zIndex: 60, maxWidth: 430, margin: '0 auto'
     }}>
-      {/* Hero image */}
+      {/* Hero image + mascot overlay */}
       <div style={{ position: 'relative', height: 260, overflow: 'hidden' }}>
         <img
           src={END_IMG}
@@ -21,8 +21,26 @@ export default function EndScreen({ exercisesDone, totalVolume, durationMinutes,
         />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(15,15,15,0.3), rgba(15,15,15,0.98) 85%)'
+          background: 'linear-gradient(to bottom, rgba(15,15,15,0.4), rgba(15,15,15,0.98) 88%)'
         }} />
+        {/* Mascot centré */}
+        <img
+          src="/icons/mascot.png"
+          alt=""
+          style={{
+            position: 'absolute',
+            bottom: 16, right: 16,
+            height: 180,
+            width: 'auto',
+            filter: 'brightness(0) invert(1)',
+            opacity: 0.15,
+            pointerEvents: 'none'
+          }}
+        />
+        {/* Logo AGBAZA en haut à gauche */}
+        <div style={{ position: 'absolute', top: 20, left: 16 }}>
+          <img src="/icons/textW.png" alt="AGBAZA" style={{ height: 24, width: 'auto', opacity: 0.8 }} />
+        </div>
       </div>
 
       {/* Content */}

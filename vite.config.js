@@ -19,7 +19,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'logo192.png'],
+      includeAssets: ['icons/fav.png', 'icons/mascot.png', 'icons/text.png', 'icons/textW.png'],
       manifest: {
         name: 'AGBAZA',
         short_name: 'AGBAZA',
@@ -30,9 +30,8 @@ export default defineConfig({
         orientation: 'portrait',
         start_url: '/',
         icons: [
-          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+          { src: 'icons/fav.png', sizes: '384x384', type: 'image/png' },
+          { src: 'icons/fav.png', sizes: '384x384', type: 'image/png', purpose: 'maskable' }
         ]
       },
       workbox: {

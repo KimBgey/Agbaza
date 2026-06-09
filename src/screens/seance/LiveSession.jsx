@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../contexts/AuthContext'
 import { useExercises } from '../../hooks/useFirestore'
 import { useRestTimer, useStopwatch } from '../../hooks/useTimer'
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore'
+import { db } from '../../firebase'
 import {
   IconCheck, IconChevronLeft, IconPlus, IconX
 } from '../../components/Icons'
@@ -56,6 +58,30 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
   const [currentSetIdx, setCurrentSetIdx] = useState(resume?.currentSetIdx ?? 0)
   const [showEnd,     setShowEnd]     = useState(false)
   const [showLibrary, setShowLibrary] = useState(false)
+  const [lastPerf,    setLastPerf]    = useState({}) // { [exerciseId]: [{weight,reps},...] }
+
+  // Fetch last perf for each exercise from session history
+  useEffect(() => {
+    if (!user) return
+    const q = query(
+      collection(db, `agbaza_sessions/${user.uid}/sessions`),
+      orderBy('startedAt', 'desc'),
+      limit(20)
+    )
+    getDocs(q).then(snap => {
+      const perf = {}
+      snap.docs.forEach(doc => {
+        const { exercises = [] } = doc.data()
+        exercises.forEach(ex => {
+          if (!perf[ex.exerciseId]) {
+            const doneSets = (ex.sets || []).filter(s => s.completed && (Number(s.weight) > 0 || Number(s.reps) > 0))
+            if (doneSets.length) perf[ex.exerciseId] = ex.sets
+          }
+        })
+      })
+      setLastPerf(perf)
+    }).catch(() => {})
+  }, [user])
 
   // Start or resume stopwatch
   useEffect(() => {
@@ -158,13 +184,19 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
 
   const skipExercise = () => {
     restTimer.stop()
-    const nextEx = currentExIdx + 1
-    if (nextEx < exerciseList.length) {
-      setCurrentExIdx(nextEx)
-      setCurrentSetIdx(0)
-    } else {
+    setExerciseList(prev => {
+      const next = [...prev]
+      const [skipped] = next.splice(currentExIdx, 1)
+      next.push(skipped)
+      return next
+    })
+    // currentExIdx unchanged — the next exercise slides into this position
+    // If we just pushed the last exercise, it'll loop back; if list had 1 item,
+    // show the "all done" panel.
+    if (exerciseList.length <= 1) {
       setCurrentExIdx(exerciseList.length)
     }
+    setCurrentSetIdx(0)
   }
 
   /* ─── Complete cardio exercise ──────────────────────────────── */
@@ -430,14 +462,23 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
               />
             ) : (
               <>
+                {/* YouTube demo — inline above sets */}
+                {(() => {
+                  const full = exerciseDb.find(e => e.id === currentEx.exerciseId)
+                  return full?.youtubeVideoId ? (
+                    <SessionVideoPlayer videoId={full.youtubeVideoId} title={getExName(currentEx)} />
+                  ) : null
+                })()}
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
                   {currentEx.sets.map((set, si) => (
                     <SetRow
                       key={si}
                       set={set} setIdx={si} exIdx={currentExIdx}
                       isActive={si === currentSetIdx && !set.completed}
-                      t={t} unit={userProfile?.weightUnit || 'kg'}
+                      unit={userProfile?.weightUnit || 'kg'}
                       onChange={updateSet}
+                      lastSet={lastPerf[currentEx.exerciseId]?.[si]}
                     />
                   ))}
                 </div>
@@ -544,13 +585,43 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
           </div>
         )}
       </div>
+
     </div>
   )
 }
 
-function SetRow({ set, setIdx, exIdx, isActive, t, unit, onChange }) {
+function SessionVideoPlayer({ videoId, title }) {
+  const [ready, setReady] = useState(false)
   return (
-    <div className={`set-row ${set.completed ? 'done' : ''}`} style={{ borderColor: isActive ? 'var(--ag-orange)' : undefined }}>
+    <div style={{ marginBottom: 16, borderRadius: 12, overflow: 'hidden', position: 'relative', paddingBottom: '56.25%', background: '#111' }}>
+      {!ready && (
+        <div className="skeleton" style={{ position: 'absolute', inset: 0, borderRadius: 0 }} />
+      )}
+      <iframe
+        src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&color=white`}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        onLoad={() => setReady(true)}
+        style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          border: 'none', opacity: ready ? 1 : 0, transition: 'opacity 350ms',
+        }}
+      />
+    </div>
+  )
+}
+
+function SetRow({ set, setIdx, exIdx, isActive, unit, onChange, lastSet }) {
+  const prevWeight = lastSet ? Number(lastSet.weight) : 0
+  const prevReps   = lastSet ? Number(lastSet.reps)   : 0
+  const hasLastPerf = prevWeight > 0 || prevReps > 0
+
+  return (
+    <div
+      className={`set-row ${set.completed ? 'done' : ''}`}
+      style={{ borderColor: isActive ? 'var(--ag-orange)' : undefined, flexWrap: 'wrap', gap: '10px 12px' }}
+    >
       <div style={{
         width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
         background: set.completed ? 'var(--ag-orange)' : (isActive ? 'var(--ag-orange-soft)' : 'transparent'),
@@ -569,7 +640,7 @@ function SetRow({ set, setIdx, exIdx, isActive, t, unit, onChange }) {
           <span style={{ fontSize: 9, color: 'var(--ag-muted)', fontWeight: 600, textTransform: 'uppercase' }}>{unit}</span>
           <input
             className="num-input" type="number"
-            value={set.weight} placeholder="0" min="0" step="0.5"
+            value={set.weight} placeholder={prevWeight > 0 ? String(prevWeight) : '0'} min="0" step="0.5"
             disabled={set.completed}
             onChange={e => onChange(exIdx, setIdx, 'weight', e.target.value)}
             style={{ color: set.completed ? 'var(--ag-orange)' : undefined }}
@@ -589,6 +660,13 @@ function SetRow({ set, setIdx, exIdx, isActive, t, unit, onChange }) {
       </div>
 
       {set.completed && <span style={{ fontSize: 11, color: 'var(--ag-orange)', fontWeight: 700 }}>✓</span>}
+
+      {/* Last perf hint */}
+      {hasLastPerf && !set.completed && (
+        <div style={{ flexBasis: '100%', paddingLeft: 34, fontSize: 10, color: 'var(--ag-muted)', opacity: 0.7, marginTop: -4 }}>
+          Dernière&nbsp;: {prevWeight > 0 ? `${prevWeight} ${unit}` : '—'} × {prevReps}
+        </div>
+      )}
     </div>
   )
 }

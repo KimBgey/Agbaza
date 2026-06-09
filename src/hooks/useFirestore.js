@@ -86,6 +86,22 @@ export function useSessions() {
   return { sessions, loading, saveSession, refetch: fetchSessions }
 }
 
+export function useTemplates() {
+  const [templates, setTemplates] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getDocs(collection(db, 'agbaza_templates'))
+      .then(snap => {
+        setTemplates(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
+
+  return { templates, loading }
+}
+
 export function useBodyWeight() {
   const { user } = useAuth()
   const [entries, setEntries] = useState([])

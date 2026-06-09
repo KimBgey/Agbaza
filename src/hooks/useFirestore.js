@@ -86,6 +86,41 @@ export function useSessions() {
   return { sessions, loading, saveSession, refetch: fetchSessions }
 }
 
+export function useBodyWeight() {
+  const { user } = useAuth()
+  const [entries, setEntries] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  const fetchEntries = async () => {
+    if (!user) return
+    setLoading(true)
+    try {
+      const snap = await getDocs(collection(db, `agbaza_bodyweight/${user.uid}/entries`))
+      const sorted = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 90)
+      setEntries(sorted)
+    } catch (_) {}
+    setLoading(false)
+  }
+
+  useEffect(() => { fetchEntries() }, [user])
+
+  const saveEntry = async (weight) => {
+    if (!user || !weight) return
+    const today = new Date().toISOString().slice(0, 10)
+    await setDoc(doc(db, `agbaza_bodyweight/${user.uid}/entries`, today), {
+      date: today,
+      weight: Number(weight),
+      recordedAt: serverTimestamp()
+    })
+    await fetchEntries()
+  }
+
+  return { entries, loading, saveEntry }
+}
+
 export function useExercises() {
   const [exercises, setExercises] = useState([])
   const [loading, setLoading] = useState(true)

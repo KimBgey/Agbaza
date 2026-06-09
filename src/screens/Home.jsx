@@ -55,6 +55,28 @@ export default function Home() {
     return { count: weekly.length, volume: totalVolume, avgDuration, pr }
   }, [sessions])
 
+  // Streak — consecutive training days ending today or yesterday
+  const streak = useMemo(() => {
+    if (!sessions.length) return 0
+    const dates = new Set(
+      sessions.map(s => {
+        const d = s.startedAt?.toDate ? s.startedAt.toDate() : new Date(s.startedAt)
+        return d.toISOString().slice(0, 10)
+      })
+    )
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const todayStr = today.toISOString().slice(0, 10)
+    const cursor = new Date(today)
+    if (!dates.has(todayStr)) cursor.setDate(cursor.getDate() - 1)
+    let count = 0
+    while (dates.has(cursor.toISOString().slice(0, 10))) {
+      count++
+      cursor.setDate(cursor.getDate() - 1)
+    }
+    return count
+  }, [sessions])
+
   const lastSession = sessions[0]
   const suggestedProgram = programs[0]
 
@@ -107,6 +129,9 @@ export default function Home() {
       </div>
 
       <div className="px" style={{ paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 20 }}>
+        {/* Streak banner */}
+        {streak >= 1 && <StreakBanner streak={streak} />}
+
         {/* Week stats */}
         <div>
           <div className="section-header">
@@ -224,6 +249,48 @@ export default function Home() {
             </button>
           </div>
         )}
+      </div>
+    </div>
+  )
+}
+
+function StreakBanner({ streak }) {
+  const label = streak >= 7
+    ? `Semaine complète !`
+    : streak >= 3
+    ? `Continue comme ça !`
+    : `C'est parti !`
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 14,
+      background: 'linear-gradient(135deg, var(--ag-orange-soft) 0%, rgba(245,94,0,0.06) 100%)',
+      border: '1px solid rgba(245,94,0,0.25)',
+      borderRadius: 'var(--ag-radius)',
+      padding: '14px 16px',
+    }}>
+      <div style={{
+        width: 48, height: 48, borderRadius: '50%', flexShrink: 0,
+        background: 'var(--ag-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: '0 0 16px rgba(245,94,0,0.4)'
+      }}>
+        <IconFlame size={22} color="#fff" />
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 11, color: 'var(--ag-orange)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 2 }}>
+          Streak
+        </div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+          <span style={{ fontSize: 28, fontWeight: 900, fontStyle: 'italic', letterSpacing: '-1px', color: 'var(--ag-text)' }}>
+            {streak}
+          </span>
+          <span style={{ fontSize: 13, color: 'var(--ag-muted)', fontWeight: 600 }}>
+            jour{streak > 1 ? 's' : ''} consécutif{streak > 1 ? 's' : ''}
+          </span>
+        </div>
+      </div>
+      <div style={{ fontSize: 12, color: 'var(--ag-orange)', fontWeight: 700, textAlign: 'right', maxWidth: 90, lineHeight: 1.3 }}>
+        {label}
       </div>
     </div>
   )

@@ -1,9 +1,9 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../contexts/AuthContext'
 import { useExercises } from '../../hooks/useFirestore'
 import { useRestTimer, useStopwatch } from '../../hooks/useTimer'
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore'
+import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase'
 import {
   IconCheck, IconChevronLeft, IconPlus, IconX
@@ -36,7 +36,7 @@ const SESSION_KEY = 'ag_active_session'
 
 export default function LiveSession({ program, resume, onFinish, onCancel }) {
   const { t, i18n }   = useTranslation()
-  const { userProfile } = useAuth()
+  const { user, userProfile } = useAuth()
   const { exercises: exerciseDb } = useExercises()
   const lang = i18n.language || 'fr'
 
@@ -59,29 +59,39 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
   const [showEnd,     setShowEnd]     = useState(false)
   const [showLibrary, setShowLibrary] = useState(false)
   const [lastPerf,    setLastPerf]    = useState({}) // { [exerciseId]: [{weight,reps},...] }
+  const [maxEver,     setMaxEver]     = useState({}) // { [exerciseId]: maxWeight }
+  const [prFlash,     setPrFlash]     = useState(null) // exercise name string
 
-  // Fetch last perf for each exercise from session history
+  // Fetch session history → last perf + all-time max weight per exercise
   useEffect(() => {
     if (!user) return
-    const q = query(
-      collection(db, `agbaza_sessions/${user.uid}/sessions`),
-      orderBy('startedAt', 'desc'),
-      limit(20)
-    )
-    getDocs(q).then(snap => {
-      const perf = {}
-      snap.docs.forEach(doc => {
-        const { exercises = [] } = doc.data()
-        exercises.forEach(ex => {
-          if (!perf[ex.exerciseId]) {
-            const doneSets = (ex.sets || []).filter(s => s.completed && (Number(s.weight) > 0 || Number(s.reps) > 0))
-            if (doneSets.length) perf[ex.exerciseId] = ex.sets
-          }
+    getDocs(collection(db, `agbaza_sessions/${user.uid}/sessions`))
+      .then(snap => {
+        const sorted = snap.docs.sort((a, b) => {
+          const aT = a.data().startedAt?.toMillis?.() || 0
+          const bT = b.data().startedAt?.toMillis?.() || 0
+          return bT - aT
         })
+        const perf = {}
+        const maxW = {}
+        sorted.forEach(docSnap => {
+          const { exercises = [] } = docSnap.data()
+          exercises.forEach(ex => {
+            if (!perf[ex.exerciseId]) {
+              const doneSets = (ex.sets || []).filter(s => s.completed && (Number(s.weight) > 0 || Number(s.reps) > 0))
+              if (doneSets.length) perf[ex.exerciseId] = ex.sets
+            }
+            ;(ex.sets || []).filter(s => s.completed).forEach(s => {
+              const w = Number(s.weight) || 0
+              if (w > (maxW[ex.exerciseId] || 0)) maxW[ex.exerciseId] = w
+            })
+          })
+        })
+        setLastPerf(perf)
+        setMaxEver(maxW)
       })
-      setLastPerf(perf)
-    }).catch(() => {})
-  }, [user])
+      .catch(() => {})
+  }, [user?.uid])
 
   // Start or resume stopwatch
   useEffect(() => {
@@ -153,6 +163,13 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
     const ex = exerciseList[currentExIdx]
     if (!ex) return
 
+    // PR check — before state update so we read current values
+    const weight = Number(ex.sets[currentSetIdx]?.weight) || 0
+    if (weight > 0 && weight > (maxEver[ex.exerciseId] || 0)) {
+      setPrFlash(getExName(ex))
+      setMaxEver(prev => ({ ...prev, [ex.exerciseId]: weight }))
+    }
+
     setExerciseList(prev => {
       const next = [...prev]
       next[currentExIdx] = {
@@ -180,6 +197,35 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
         setCurrentExIdx(exerciseList.length)
       }
     }
+  }
+
+  /* ─── Add / remove set on-the-fly ───────────────────────────── */
+  const addSet = () => {
+    setExerciseList(prev => {
+      const next = [...prev]
+      const ex = next[currentExIdx]
+      const lastSet = ex.sets[ex.sets.length - 1]
+      next[currentExIdx] = {
+        ...ex,
+        sets: [...ex.sets, { weight: lastSet?.weight || '', reps: lastSet?.reps || 10, completed: false }]
+      }
+      return next
+    })
+  }
+
+  const removeSet = () => {
+    setExerciseList(prev => {
+      const next = [...prev]
+      const ex = next[currentExIdx]
+      const removable = ex.sets.filter(s => !s.completed)
+      if (removable.length <= 1) return prev
+      // Remove last non-completed set
+      const lastIdx = [...ex.sets].map((s, i) => (!s.completed ? i : -1)).filter(i => i >= 0).pop()
+      const newSets = ex.sets.filter((_, i) => i !== lastIdx)
+      next[currentExIdx] = { ...ex, sets: newSets }
+      if (currentSetIdx >= newSets.length) setCurrentSetIdx(newSets.length - 1)
+      return next
+    })
   }
 
   const skipExercise = () => {
@@ -311,6 +357,9 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
       display: 'flex', flexDirection: 'column', zIndex: 50,
       maxWidth: 430, margin: '0 auto'
     }}>
+      {prFlash && (
+        <PRFlash name={prFlash} onDone={() => setPrFlash(null)} />
+      )}
       {/* Top bar */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: 12,
@@ -483,6 +532,29 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
                   ))}
                 </div>
 
+                {/* +/- séries */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                  <button
+                    className="btn-icon"
+                    onClick={removeSet}
+                    disabled={currentEx.sets.filter(s => !s.completed).length <= 1}
+                    style={{ opacity: currentEx.sets.filter(s => !s.completed).length <= 1 ? 0.3 : 1 }}
+                    aria-label="Supprimer une série"
+                  >
+                    <span style={{ fontSize: 18, fontWeight: 700, lineHeight: 1 }}>−</span>
+                  </button>
+                  <span style={{ fontSize: 12, color: 'var(--ag-muted)', flex: 1, textAlign: 'center' }}>
+                    {currentEx.sets.length} {currentEx.sets.length > 1 ? 'séries' : 'série'}
+                  </span>
+                  <button
+                    className="btn-icon"
+                    onClick={addSet}
+                    aria-label="Ajouter une série"
+                  >
+                    <span style={{ fontSize: 18, fontWeight: 700, lineHeight: 1 }}>+</span>
+                  </button>
+                </div>
+
                 {!currentEx.sets[currentSetIdx]?.completed && (
                   <button className="btn-primary" onClick={validateSet} style={{ marginBottom: 10 }}>
                     <IconCheck size={16} />
@@ -586,6 +658,29 @@ export default function LiveSession({ program, resume, onFinish, onCancel }) {
         )}
       </div>
 
+    </div>
+  )
+}
+
+function PRFlash({ name, onDone }) {
+  const onDoneRef = useRef(onDone)
+  useEffect(() => {
+    const t = setTimeout(() => onDoneRef.current(), 2400)
+    return () => clearTimeout(t)
+  }, [])
+
+  return (
+    <div className="pr-flash">
+      <div style={{ fontSize: 64, lineHeight: 1, marginBottom: 16 }}>🏆</div>
+      <div style={{
+        fontSize: 22, fontWeight: 900, color: '#fff',
+        letterSpacing: '-0.5px', textTransform: 'uppercase', marginBottom: 6
+      }}>
+        Nouveau record !
+      </div>
+      <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.85)', fontWeight: 600, textAlign: 'center', maxWidth: 240 }}>
+        {name}
+      </div>
     </div>
   )
 }

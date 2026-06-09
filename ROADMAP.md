@@ -3,18 +3,18 @@
 ## En séance
 
 - [x] **Dernière perf affichée** — sous chaque série, afficher le poids × reps de la dernière séance pour cet exercice
-- [ ] **Alerte fin de repos** — vibration + bip quand le timer de repos atteint 0
-- [ ] **+/- séries à la volée** — ajouter ou supprimer une série sur l'exercice en cours sans quitter la séance
+- [x] **Alerte fin de repos** — vibration + bip quand le timer de repos atteint 0
+- [x] **+/- séries à la volée** — ajouter ou supprimer une série sur l'exercice en cours sans quitter la séance
 
 ## Suivi & progression
 
-- [ ] **Suivi du poids corporel** — saisie quotidienne/hebdomadaire + graphe sur l'écran Progrès
-- [ ] **Détection de PR automatique** — animation dans la séance quand un record est battu sur un exercice
-- [ ] **Streak d'entraînement** — compteur de jours consécutifs affiché sur l'accueil
+- [x] **Suivi du poids corporel** — saisie quotidienne/hebdomadaire + graphe sur l'écran Progrès
+- [x] **Détection de PR automatique** — animation dans la séance quand un record est battu sur un exercice
+- [x] **Streak d'entraînement** — compteur de jours consécutifs affiché sur l'accueil
 
 ## Contenu & onboarding
 
-- [ ] **Templates de programmes** — 3-4 programmes pré-remplis (PPL, Full Body 3j, Upper/Lower) duplicables
+- [x] **Templates de programmes** — 4 sessions Sèche 4j (Pecto/Tri, Dos/Bi, Épaules/Abdos, Jambes) importables en 1 clic
 
 ---
 

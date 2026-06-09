@@ -1,7 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSessions } from '../hooks/useFirestore'
-import { useExercises } from '../hooks/useFirestore'
+import { useSessions, useExercises, useBodyWeight } from '../hooks/useFirestore'
 import { useAuth } from '../contexts/AuthContext'
 import {
   BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -35,6 +34,7 @@ export default function Progres() {
   const { userProfile } = useAuth()
   const { sessions, loading } = useSessions()
   const { exercises: exerciseDb } = useExercises()
+  const { entries: weightEntries, saveEntry: saveWeight } = useBodyWeight()
   const [selectedExercise, setSelectedExercise] = useState(null)
   const [showDetail, setShowDetail] = useState(null)
   const lang = i18n.language || 'fr'
@@ -100,6 +100,8 @@ export default function Progres() {
     <div className="screen">
       <div className="px pt" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
         <h1 className="t-title">{t('progres.title')}</h1>
+
+        <BodyWeightSection entries={weightEntries} onSave={saveWeight} unit={unit} />
 
         {loading ? (
           Array(3).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 160, borderRadius: 14 }} />)
@@ -208,6 +210,112 @@ export default function Progres() {
           </>
         )}
       </div>
+    </div>
+  )
+}
+
+function BodyWeightSection({ entries, onSave, unit }) {
+  const today = new Date().toISOString().slice(0, 10)
+  const todayEntry = entries.find(e => e.date === today)
+  const [value, setValue] = useState(todayEntry ? String(todayEntry.weight) : '')
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+
+  useEffect(() => {
+    if (todayEntry) setValue(String(todayEntry.weight))
+  }, [todayEntry?.weight])
+
+  const handleSave = async () => {
+    if (!value || isNaN(Number(value))) return
+    setSaving(true)
+    await onSave(value)
+    setSaving(false)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
+  const chartData = [...entries]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(-30)
+    .map(e => ({
+      date: e.date.slice(5).replace('-', '/'),
+      weight: e.weight
+    }))
+
+  const minW = chartData.length ? Math.floor(Math.min(...chartData.map(d => d.weight)) - 2) : 0
+  const maxW = chartData.length ? Math.ceil(Math.max(...chartData.map(d => d.weight)) + 2) : 100
+
+  return (
+    <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span className="t-card-h">Poids corporel</span>
+        {todayEntry && (
+          <span style={{ fontSize: 11, color: 'var(--ag-orange)', fontWeight: 700 }}>
+            {todayEntry.weight} {unit} aujourd'hui
+          </span>
+        )}
+      </div>
+
+      {/* Input row */}
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div style={{ position: 'relative', flex: 1 }}>
+          <input
+            className="input"
+            type="number"
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            placeholder={`Ex: 75`}
+            min="20" max="300" step="0.1"
+            style={{ paddingRight: 36 }}
+          />
+          <span style={{
+            position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+            fontSize: 12, color: 'var(--ag-muted)', fontWeight: 600, pointerEvents: 'none'
+          }}>{unit}</span>
+        </div>
+        <button
+          className="btn-primary"
+          onClick={handleSave}
+          disabled={saving || !value}
+          style={{ width: 'auto', padding: '0 16px', minHeight: 44, fontSize: 13 }}
+        >
+          {saved ? '✓' : saving ? '…' : 'Enregistrer'}
+        </button>
+      </div>
+
+      {/* Chart */}
+      {chartData.length >= 2 && (
+        <ResponsiveContainer width="100%" height={120}>
+          <LineChart data={chartData} margin={{ top: 4, right: 4, left: -28, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--ag-border)" />
+            <XAxis
+              dataKey="date"
+              tick={{ fill: '#777', fontSize: 9, fontFamily: 'Syne' }}
+              axisLine={false} tickLine={false}
+              interval="preserveStartEnd"
+            />
+            <YAxis
+              domain={[minW, maxW]}
+              tick={{ fill: '#777', fontSize: 9, fontFamily: 'Syne' }}
+              axisLine={false} tickLine={false}
+              unit={unit}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Line
+              type="monotone" dataKey="weight"
+              stroke="var(--ag-orange)" strokeWidth={2}
+              dot={{ fill: 'var(--ag-orange)', r: 3 }}
+              activeDot={{ r: 5 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      )}
+
+      {chartData.length === 0 && (
+        <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--ag-muted)', padding: '8px 0' }}>
+          Enregistre ton poids chaque jour pour voir l'évolution.
+        </div>
+      )}
     </div>
   )
 }

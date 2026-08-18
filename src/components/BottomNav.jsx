@@ -4,7 +4,7 @@ import { IconHome, IconList, IconPlay, IconChart, IconUser } from './Icons'
 
 const SIDE_TABS = [
   [
-    { path: '/',          labelKey: 'nav.home',      Icon: IconHome  },
+    { path: '/home',      labelKey: 'nav.home',      Icon: IconHome  },
     { path: '/programme', labelKey: 'nav.programme', Icon: IconList  },
   ],
   [

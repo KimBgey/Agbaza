@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuth, AuthProvider } from './contexts/AuthContext'
 import BottomNav from './components/BottomNav'
 import Home from './screens/Home'
@@ -10,6 +10,7 @@ import Profil from './screens/Profil'
 import Login from './screens/auth/Login'
 import Register from './screens/auth/Register'
 import Onboarding from './screens/auth/Onboarding'
+import LandingPage from './screens/landing/LandingPage'
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth()
@@ -24,6 +25,14 @@ function OnboardingGuard({ children }) {
   if (!user) return <Navigate to="/login" replace />
   if (!userProfile) return <Navigate to="/onboarding" replace />
   return children
+}
+
+function RootRoute() {
+  const { user, userProfile, loading } = useAuth()
+  if (loading) return <Loader />
+  if (user && userProfile) return <Navigate to="/home" replace />
+  if (user && !userProfile) return <Navigate to="/onboarding" replace />
+  return <LandingPage />
 }
 
 function Loader() {
@@ -53,11 +62,13 @@ function Loader() {
 }
 
 function AppShell() {
-  const { user, userProfile } = useAuth()
+  const { user, userProfile, loading } = useAuth()
   const showNav = user && userProfile
+  const location = useLocation()
+  const isLanding = location.pathname === '/' && !loading && !(user && userProfile)
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell${isLanding ? ' app-shell--full' : ''}`}>
       <Routes>
         {/* Auth */}
         <Route path="/login" element={<Login />} />
@@ -66,8 +77,11 @@ function AppShell() {
           <PrivateRoute><Onboarding /></PrivateRoute>
         } />
 
+        {/* Public landing / redirect */}
+        <Route path="/" element={<RootRoute />} />
+
         {/* App */}
-        <Route path="/" element={
+        <Route path="/home" element={
           <OnboardingGuard><Home /></OnboardingGuard>
         } />
         <Route path="/programme" element={

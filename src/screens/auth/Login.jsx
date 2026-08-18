@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../contexts/AuthContext'
-import { IconGoogle } from '../../components/Icons'
+import { IconGoogle, IconChevronLeft } from '../../components/Icons'
 
 export default function Login() {
   const { t } = useTranslation()
@@ -50,8 +50,12 @@ export default function Login() {
 
   return (
     <div className="auth-screen">
+      <Link to="/" className="btn-icon" aria-label={t('auth.back_home')} style={{ marginTop: 24, textDecoration: 'none' }}>
+        <IconChevronLeft size={18} />
+      </Link>
+
       {/* Header */}
-      <div style={{ paddingTop: 56, paddingBottom: 40 }}>
+      <div style={{ paddingTop: 20, paddingBottom: 40 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
           <img src="/icons/fav.png" alt="AGBAZA" style={{ width: 44, height: 44, borderRadius: 10 }} />
           <img src="/icons/textW.png" alt="AGBAZA" style={{ height: 28, width: 'auto' }} />

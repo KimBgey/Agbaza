@@ -127,7 +127,7 @@ export default function Seance() {
             boxShadow: '0 4px 16px rgba(245,94,0,0.4)',
             overflow: 'hidden',
           }}>
-            <img src="/icons/mascot.png" alt="" style={{ width: 46, height: 46, objectFit: 'contain' }} />
+            <img src="/icons/mascot-white.png" alt="" style={{ width: 46, height: 46, objectFit: 'contain' }} />
           </div>
           <div style={{ flex: 1 }}>
             <img src="/icons/text.png" alt="AGBAZA" style={{ height: 20, width: 'auto', marginBottom: 4 }} />

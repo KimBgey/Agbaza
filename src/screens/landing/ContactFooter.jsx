@@ -51,6 +51,7 @@ export default function ContactFooter() {
           <div className="lp-footer-grid">
             <div className="lp-footer-brand">
               <button className="lp-logo" onClick={scrollTop} aria-label="AGBAZA — retour en haut">
+                <img src="/icons/mascot-white.png" alt="" className="lp-logo-mark" />
                 <img src="/icons/textW.png" alt="AGBAZA" />
               </button>
               <span className="lp-footer-tagline">Gym tracker mobile-first. Gratuit.</span>

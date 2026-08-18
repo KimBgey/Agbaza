@@ -19,7 +19,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/fav.png', 'icons/mascot.png', 'icons/text.png', 'icons/textW.png'],
+      includeAssets: ['icons/fav.png', 'icons/mascot.png', 'icons/mascot-white.png', 'icons/text.png', 'icons/textW.png'],
       manifest: {
         name: 'AGBAZA',
         short_name: 'AGBAZA',

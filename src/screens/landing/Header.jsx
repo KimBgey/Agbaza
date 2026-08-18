@@ -29,6 +29,7 @@ export default function Header() {
     <>
       <header className={`lp-header${scrolled || menuOpen ? ' is-scrolled' : ''}`}>
         <button className="lp-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="AGBAZA — retour en haut">
+          <img src="/icons/mascot-white.png" alt="" className="lp-logo-mark" />
           <img src="/icons/textW.png" alt="AGBAZA" />
         </button>
 

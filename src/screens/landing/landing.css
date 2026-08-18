@@ -147,6 +147,7 @@ body.lp-active {
   padding: 0;
 }
 .lp-logo img { height: 22px; width: auto; }
+.lp-logo-mark { height: 26px !important; }
 
 .lp-nav-desktop {
   display: none;
